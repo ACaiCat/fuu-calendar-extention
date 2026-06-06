@@ -59,7 +59,7 @@ func buildLecturesCalendar(stu *jwch.Student) ([]byte, error) {
 		event.SetCreatedTime(time.Now())
 		event.SetDtStampTime(time.Now())
 		event.SetModifiedAt(time.Now())
-		event.SetSummary(lecture.Title)
+		event.SetSummary("[讲座] " + lecture.Title)
 		event.SetDescription(description)
 
 		// 位置信息
@@ -67,7 +67,7 @@ func buildLecturesCalendar(stu *jwch.Student) ([]byte, error) {
 		if lat != 0 && lon != 0 {
 			event.SetGeo(lat, lon)
 		}
-		event.SetLocation("[讲座] " + lecture.Title)
+		event.SetLocation(lecture.Location)
 
 		// 开始时间
 		startTime := time.UnixMilli(lecture.Timestamp)
