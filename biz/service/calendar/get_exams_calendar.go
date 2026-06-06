@@ -58,10 +58,8 @@ func buildExamsCalendar(stu *jwch.Student) ([]byte, error) {
 
 		eventIdBase := fmt.Sprintf("%s__%s_%s",
 			exam.CourseName, exam.Teacher, exam.Time)
-		description := fmt.Sprintf(
-			"任课教师：%s\n"+
-				"学分：%d"+
-				exam.Teacher, exam.Credit)
+		description := fmt.Sprintf("任课教师：%s\n"+
+			"学分：%s", exam.Teacher, exam.Credit)
 
 		event := cal.AddEvent(util.Md5Str(eventIdBase))
 		event.SetCreatedTime(time.Now())
@@ -77,7 +75,7 @@ func buildExamsCalendar(stu *jwch.Student) ([]byte, error) {
 		}
 		event.SetLocation(exam.Location)
 
-		startTime, endTime, err := util.ParseExamTime(exam.Time)
+		startTime, endTime, err := util.ParseExamTime(exam.Date, exam.Time)
 
 		if err != nil {
 			return nil, err

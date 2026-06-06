@@ -1,26 +1,27 @@
 package util
 
 import (
-	"errors"
+	"fmt"
 	"strings"
 	"time"
 )
 
-func ParseExamTime(examTime string) (time.Time, time.Time, error) {
+func ParseExamTime(examData, examTime string) (time.Time, time.Time, error) {
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+
 	parts := strings.Split(examTime, "-")
 	if len(parts) != 2 {
-		return time.Time{}, time.Time{}, errors.New("Invalid examTime: " + examTime)
+		return time.Time{}, time.Time{}, fmt.Errorf("parse exam time: %s %s", examTime, examData)
+	}
+	startTime, err := time.ParseInLocation("2006年01月02日15:04", examData+parts[0], loc)
+	if err != nil {
+		return time.Time{}, time.Time{}, fmt.Errorf("parse exam time: %w %s %s", err, examTime, examData)
 	}
 
-	startTime, err := time.Parse("15:04", parts[0])
-	if err != nil {
-		return time.Time{}, time.Time{}, errors.New("Invalid examTime: " + examTime)
-	}
-
-	endTime, err := time.Parse("15:04", parts[1])
+	endTime, err := time.ParseInLocation("2006年01月02日15:04", examData+parts[1], loc)
 
 	if err != nil {
-		return time.Time{}, time.Time{}, errors.New("Invalid examTime: " + examTime)
+		return time.Time{}, time.Time{}, fmt.Errorf("parse exam time: %w %s %s", err, examTime, examData)
 	}
 
 	return startTime, endTime, nil
